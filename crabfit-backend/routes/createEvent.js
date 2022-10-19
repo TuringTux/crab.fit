@@ -32,7 +32,7 @@ const createEvent = async (req, res) => {
     // Check if the event ID already exists, and if so generate a new one
     let eventResult
     do {
-      eventResult = await findEvent(eventId)
+      eventResult = await loadEvent(eventId)
 
       if (eventResult !== undefined) {
         eventId = generateId(name)

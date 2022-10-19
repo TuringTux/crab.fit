@@ -6,14 +6,6 @@ const events = new Keyv({namespace: isProduction ? 'Event' : 'DevEvent' })
 const people = new Keyv({namespace: isProduction ? 'Person' : 'DevPerson' })
 const stats = new Keyv({namespace: isProduction ? 'Stat' : 'DevStats'})
 
-export async function findEvent(eventId) { // TODO Migrate to keyv
-  const query = datastore.createQuery(TYPES.event)
-    .select('__key__')
-    .filter('__key__', datastore.key([TYPES.event, eventId]))
-
-  return (await datastore.runQuery(query))[0][0]
-}
-
 export async function findOldPeople(threeMonthsAgo) { // TODO Migrate to keyv
   const peopleQuery = datastore.createQuery(TYPES.person).filter('created', '<', threeMonthsAgo)
   const oldPeople = (await datastore.runQuery(peopleQuery))[0]
