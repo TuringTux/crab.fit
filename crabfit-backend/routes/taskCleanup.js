@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { deleteEvents, deletePeople, findOldEvents } from '../model/methods'
+import { deleteEvents, deletePeople, findOldEvents, findPeopleOfEvent } from '../model/methods'
 
 const taskCleanup = async (req, res) => {
   if (req.header('X-Appengine-Cron') === undefined) {
@@ -21,8 +21,7 @@ const taskCleanup = async (req, res) => {
       // Fetch availabilities linked to the events discovered
       let peopleDiscovered = 0
       await Promise.all(oldEventIds.map(async eventId => {
-        const peopleQuery = req.datastore.createQuery(req.types.person).filter('eventId', eventId)
-        const oldPeople = (await req.datastore.runQuery(peopleQuery))[0]
+        const oldPeople = findPeopleOfEvent(req, eventId)
 
         if (oldPeople && oldPeople.length > 0) {
           peopleDiscovered += oldPeople.length
