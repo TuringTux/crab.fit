@@ -6,6 +6,13 @@ export async function loadEvent(req, eventId) {
   return (await req.datastore.runQuery(query))[0][0]
 }
 
+export async function loadPerson(req, eventId, personName) {
+  const query = req.datastore.createQuery(req.types.person)
+    .filter('eventId', eventId)
+    .filter('name', personName)
+
+  return (await req.datastore.runQuery(query))[0][0]
+}
 
 export async function storeEvent(req, eventId, name, currentTime, event) {
   const entity = {
