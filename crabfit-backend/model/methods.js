@@ -74,7 +74,10 @@ export async function storePerson(person, hash, eventId, currentTime) {
 }
 
 export async function storeStats(statName, value) {
-  await stats.set(statName, { value })
+  await stats.set(statName, {
+    id: statName,
+    value
+  })
 }
 
 export async function upsertEvent(event, visited) {
