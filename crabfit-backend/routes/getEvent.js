@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { loadEvent, updateEvent } from '../model/methods'
+import { loadEvent, upsertEvent } from '../model/methods'
 
 const getEvent = async (req, res) => {
   const { eventId } = req.params
@@ -14,7 +14,7 @@ const getEvent = async (req, res) => {
       })
 
       // Update last visited time
-      await updateEvent(req, event, dayjs().unix())
+      await upsertEvent(req, event, dayjs().unix())
     } else {
       res.status(404).send({ error: 'Event not found' })
     }

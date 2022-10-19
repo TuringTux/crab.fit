@@ -76,14 +76,14 @@ export async function storeStats(req, statName, value) {
   })
 }
 
-export async function updateEvent(req, entity, visited) {
+export async function upsertEvent(req, entity, visited) {
   await req.datastore.upsert({
     ...entity,
     visited: visited
   })
 }
 
-export async function updateStats(req, entity, value) {
+export async function upsertStats(req, entity, value) {
   await req.datastore.upsert({
     ...entity,
     value: value,
