@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import bcrypt from 'bcrypt'
 
-import { storePerson } from '../model/methods'
+import { loadPerson, storePerson } from '../model/methods'
 
 const createPerson = async (req, res) => {
   const { eventId } = req.params
@@ -9,10 +9,7 @@ const createPerson = async (req, res) => {
 
   try {
     const event = (await req.datastore.get(req.datastore.key([req.types.event, eventId])))[0]
-    const query = req.datastore.createQuery(req.types.person)
-      .filter('eventId', eventId)
-      .filter('name', person.name)
-    const personResult = (await req.datastore.runQuery(query))[0][0]
+    const personResult = await loadPerson(req, eventId, person.name)
 
     if (event) {
       if (person && personResult === undefined) {
