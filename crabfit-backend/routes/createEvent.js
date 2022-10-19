@@ -3,7 +3,7 @@ import punycode from 'punycode/'
 
 import adjectives from '../res/adjectives.json'
 import crabs from '../res/crabs.json'
-import { findEvent, loadStats, storeEvent, storeStats, upsertStats } from '../model/methods'
+import { loadEvent, loadStats, storeEvent, storeStats, upsertStats } from '../model/methods'
 
 const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1)
 
