@@ -46,3 +46,10 @@ export async function storePerson(req, person, hash, eventId, currentTime) {
 
   await req.datastore.insert(entity)
 }
+
+export async function storeStats(req, statName, value) {
+  await req.datastore.insert({
+    key: req.datastore.key([req.types.stats, statName]),
+    data: { value },
+  })
+}

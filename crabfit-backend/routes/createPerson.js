@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import bcrypt from 'bcrypt'
 
-import { loadPerson, storePerson } from '../model/methods'
+import { loadPerson, storePerson, storeStats } from '../model/methods'
 
 const createPerson = async (req, res) => {
   const { eventId } = req.params
@@ -33,10 +33,7 @@ const createPerson = async (req, res) => {
             value: personCountResult.value + 1,
           })
         } else {
-          await req.datastore.insert({
-            key: req.datastore.key([req.types.stats, 'personCount']),
-            data: { value: 1 },
-          })
+          await storeStats(req, 'personCount', 1)
         }
       } else {
         res.status(400).send({ error: 'Unable to create person' })

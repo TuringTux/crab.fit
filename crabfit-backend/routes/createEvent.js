@@ -3,7 +3,7 @@ import punycode from 'punycode/'
 
 import adjectives from '../res/adjectives.json'
 import crabs from '../res/crabs.json'
-import { loadEvent, storeEvent } from '../model/methods'
+import { loadEvent, storeEvent, storeStats } from '../model/methods'
 
 const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1)
 
@@ -57,10 +57,7 @@ const createEvent = async (req, res) => {
         value: eventCountResult.value + 1,
       })
     } else {
-      await req.datastore.insert({
-        key: req.datastore.key([req.types.stats, 'eventCount']),
-        data: { value: 1 },
-      })
+      await storeStats(req, 'eventCount', 1)
     }
   } catch (e) {
     console.error(e)
