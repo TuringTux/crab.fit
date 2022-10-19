@@ -1,5 +1,4 @@
 import { config } from 'dotenv'
-import { Datastore } from '@google-cloud/datastore'
 import express from 'express'
 import cors from 'cors'
 
@@ -25,15 +24,7 @@ const corsOptions = {
   origin: process.env.NODE_ENV === 'production' ? 'https://crab.fit' : 'http://localhost:5173',
 }
 
-const datastore = new Datastore({
-  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-})
-
 app.use(express.json())
-app.use((req, _res, next) => {
-  req.datastore = datastore
-  next()
-})
 app.options('*', cors(corsOptions))
 app.use(cors(corsOptions))
 
