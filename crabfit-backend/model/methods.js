@@ -76,6 +76,13 @@ export async function storeStats(req, statName, value) {
   })
 }
 
+export async function updateStats(req, entity, value) {
+  await req.datastore.upsert({
+    ...entity,
+    value: value,
+  })
+}
+
 export async function deleteEvents(req, events) {
   await req.datastore.delete(events.map(event => event[req.datastore.KEY]))
 }
