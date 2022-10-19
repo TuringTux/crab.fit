@@ -1,14 +1,10 @@
-import { Datastore } from '@google-cloud/datastore'
+import { Keyv } from 'keyv'
 
-const TYPES = {
-  event: process.env.NODE_ENV === 'production' ? 'Event' : 'DevEvent',
-  person: process.env.NODE_ENV === 'production' ? 'Person' : 'DevPerson',
-  stats: process.env.NODE_ENV === 'production' ? 'Stats' : 'DevStats',
-}
+const isProduction = process.env.NODE_ENV === 'production'
 
-const datastore = new Datastore({
-  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-})
+const events = new Keyv({namespace: isProduction ? 'Event' : 'DevEvent' })
+const people = new Keyv({namespace: isProduction ? 'Person' : 'DevPerson' })
+const stats = new Keyv({namespace: isProduction ? 'Stat' : 'DevStats'})
 
 export async function findEvent(eventId) {
   const query = datastore.createQuery(TYPES.event)
@@ -37,7 +33,7 @@ export async function findPeopleOfEvent(eventId) {
 }
 
 export async function loadEvent(eventId) {
-  return (await datastore.get(datastore.key([TYPES.event, eventId])))[0]
+  return await events.get(eventId)
 }
 
 export async function loadPerson(eventId, personName) {
@@ -49,21 +45,16 @@ export async function loadPerson(eventId, personName) {
 }
 
 export async function loadStats(statName) {
-  return (await datastore.get(datastore.key([TYPES.stats, statName])))[0] || null
+  return await stats.get(statName) || null
 }
 
 export async function storeEvent(eventId, name, currentTime, event) {
-  const entity = {
-    key: datastore.key([TYPES.event, eventId]),
-    data: {
-      name: name,
-      created: currentTime,
-      times: event.times,
-      timezone: event.timezone,
-    },
-  }
-
-  await datastore.insert(entity)
+  await events.set(eventId, {
+    name: name,
+    created: currentTime,
+    times: event.times,
+    timezone: event.timezone,
+  })
 }
 
 export async function storePerson(person, hash, eventId, currentTime) {
@@ -82,10 +73,7 @@ export async function storePerson(person, hash, eventId, currentTime) {
 }
 
 export async function storeStats(statName, value) {
-  await datastore.insert({
-    key: datastore.key([TYPES.stats, statName]),
-    data: { value },
-  })
+  await stats.set(statName, { value })
 }
 
 export async function upsertEvent(entity, visited) {
