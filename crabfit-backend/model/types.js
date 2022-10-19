@@ -1,30 +1,26 @@
-import { Sequelize, DataTypes } from 'sequelize'
+/**
+ * A storage-agnostic model of the data types used by the application.
+ *
+ * These model classes do not care (and should not know) if e.g. datastore or some
+ * other database API is used.
+ */
 
-// TODO The database should not be created just here (and ideally also not only in-memory)
-const sequelize = new Sequelize('sqlite::memory:')
+class Event {
+    name
+    created
+    times
+    timeZone
+    visited
+}
 
-// TODO The properties are certainly not all strings...
-export const Event = sequelize.define('Event', {
-    name: DataTypes.STRING,
-    created: DataTypes.STRING,
-    times: DataTypes.STRING,
-    timeZone: DataTypes.STRING,
-    visited: DataTypes.STRING,
-    // TODO Are there more?
-})
+class Person {
+    name
+    password
+    eventId
+    created
+    availability
+}
 
-// TODO The properties are certainly not all strings...
-export const Person = sequelize.define('Person', {
-    name: DataTypes.STRING,
-    password: DataTypes.STRING,
-    eventId: DataTypes.STRING,
-    created: DataTypes.STRING,
-    availability: DataTypes.STRING,
-    // TODO Are there more?
-})
-
-// TODO The properties are certainly not all strings...
-export const Stats = sequelize.define('Stats', {
-    value: DataTypes.STRING,
-    // TODO Are there more?
-})
+class Stats {
+    value
+}
