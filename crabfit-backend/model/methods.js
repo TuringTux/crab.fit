@@ -83,6 +83,13 @@ export async function upsertEvent(req, entity, visited) {
   })
 }
 
+export async function upsertPerson(req, entity, availability) {
+  await req.datastore.upsert({
+    ...entity,
+    availability: availability
+  })
+}
+
 export async function upsertStats(req, entity, value) {
   await req.datastore.upsert({
     ...entity,

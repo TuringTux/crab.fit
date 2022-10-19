@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 
-import { loadPerson } from '../model/methods'
+import { loadPerson, upsertPerson } from '../model/methods'
 
 const updatePerson = async (req, res) => {
   const { eventId, personName } = req.params
@@ -18,10 +18,7 @@ const updatePerson = async (req, res) => {
           }
         }
 
-        await req.datastore.upsert({
-          ...personResult,
-          availability: person.availability,
-        })
+        await upsertPerson(req, personResult, person.availability)
 
         res.status(200).send({ success: 'Updated' })
       } else {
