@@ -1,6 +1,8 @@
 import dayjs from 'dayjs'
 import bcrypt from 'bcrypt'
 
+import { storePerson } from '../model/methods'
+
 const createPerson = async (req, res) => {
   const { eventId } = req.params
   const { person } = req.body
@@ -22,18 +24,7 @@ const createPerson = async (req, res) => {
           hash = await bcrypt.hash(person.password, 10)
         }
 
-        const entity = {
-          key: req.datastore.key(req.types.person),
-          data: {
-            name: person.name.trim(),
-            password: hash,
-            eventId: eventId,
-            created: currentTime,
-            availability: [],
-          },
-        }
-
-        await req.datastore.insert(entity)
+        await storePerson(req, person, hash, eventId, currentTime)
 
         res.status(201).send({ success: 'Created' })
 

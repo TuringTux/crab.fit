@@ -20,3 +20,18 @@ export async function storeEvent(req, eventId, name, currentTime, event) {
 
   await req.datastore.insert(entity)
 }
+
+export async function storePerson(req, person, hash, eventId, currentTime) {
+  const entity = {
+    key: req.datastore.key(req.types.person),
+    data: {
+      name: person.name.trim(),
+      password: hash,
+      eventId: eventId,
+      created: currentTime,
+      availability: [],
+    },
+  }
+
+  await req.datastore.insert(entity)
+}
