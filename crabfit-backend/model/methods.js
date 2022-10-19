@@ -1,4 +1,4 @@
-import { Keyv } from 'keyv'
+import { default as Keyv } from 'keyv'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
