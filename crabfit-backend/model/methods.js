@@ -6,7 +6,7 @@ const events = new Keyv({namespace: isProduction ? 'Event' : 'DevEvent' })
 const people = new Keyv({namespace: isProduction ? 'Person' : 'DevPerson' })
 const stats = new Keyv({namespace: isProduction ? 'Stat' : 'DevStats'})
 
-export async function findEvent(eventId) {
+export async function findEvent(eventId) { // TODO Migrate to keyv
   const query = datastore.createQuery(TYPES.event)
     .select('__key__')
     .filter('__key__', datastore.key([TYPES.event, eventId]))
@@ -14,19 +14,19 @@ export async function findEvent(eventId) {
   return (await datastore.runQuery(query))[0][0]
 }
 
-export async function findOldPeople(threeMonthsAgo) {
+export async function findOldPeople(threeMonthsAgo) { // TODO Migrate to keyv
   const peopleQuery = datastore.createQuery(TYPES.person).filter('created', '<', threeMonthsAgo)
   const oldPeople = (await datastore.runQuery(peopleQuery))[0]
   return oldPeople
 }
 
-export async function findOldEvents(threeMonthsAgo) {
+export async function findOldEvents(threeMonthsAgo) { // TODO Migrate to keyv
   const eventQuery = datastore.createQuery(TYPES.event).filter('visited', '<', threeMonthsAgo)
   const oldEvents = (await datastore.runQuery(eventQuery))[0]
   return oldEvents
 }
 
-export async function findPeopleOfEvent(eventId) {
+export async function findPeopleOfEvent(eventId) { // TODO Migrate to keyv
   const query = datastore.createQuery(TYPES.person).filter('eventId', eventId)
   let people = (await datastore.runQuery(query))[0]
   return people
@@ -36,7 +36,7 @@ export async function loadEvent(eventId) {
   return await events.get(eventId)
 }
 
-export async function loadPerson(eventId, personName) {
+export async function loadPerson(eventId, personName) { // TODO Migrate to keyv
   const query = datastore.createQuery(TYPES.person)
     .filter('eventId', eventId)
     .filter('name', personName)
@@ -58,7 +58,7 @@ export async function storeEvent(eventId, name, currentTime, event) {
   })
 }
 
-export async function storePerson(person, hash, eventId, currentTime) {
+export async function storePerson(person, hash, eventId, currentTime) { // TODO Migrate to keyv
   const entity = {
     key: datastore.key(TYPES.person),
     data: {
@@ -87,7 +87,7 @@ export async function upsertEvent(event, visited) {
   })
 }
 
-export async function upsertPerson(entity, availability) {
+export async function upsertPerson(entity, availability) { // TODO Migrate to keyv
   await datastore.upsert({
     ...entity,
     availability: availability
@@ -101,18 +101,18 @@ export async function upsertStats(stat, value) {
   })
 }
 
-export async function deleteEvents(events) {
+export async function deleteEvents(events) { // TODO Migrate to keyv
   await datastore.delete(events.map(event => event[datastore.KEY]))
 }
 
-export async function deletePeople(people) {
+export async function deletePeople(people) { // TODO Migrate to keyv
   await datastore.delete(people.map(person => person[datastore.KEY]))
 }
 
-export async function deletePerson(person) {
+export async function deletePerson(person) { // TODO Migrate to keyv
   await datastore.delete(person[datastore.KEY])
 }
 
-export function getEventIds(events) {
+export function getEventIds(events) { // TODO Migrate to keyv
   return events.map(e => e[datastore.KEY].name)
 }
