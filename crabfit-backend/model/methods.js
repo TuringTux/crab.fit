@@ -77,10 +77,10 @@ export async function storeStats(statName, value) {
   await stats.set(statName, { value })
 }
 
-export async function upsertEvent(entity, visited) {
-  await datastore.upsert({
-    ...entity,
-    visited: visited
+export async function upsertEvent(event, visited) {
+  await events.set(event.id, {
+    ...event,
+    visited
   })
 }
 
