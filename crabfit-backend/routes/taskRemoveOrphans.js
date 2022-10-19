@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { loadEvent } from '../model/methods'
+import { findOldPeople, loadEvent } from '../model/methods'
 
 const taskRemoveOrphans = async (req, res) => {
   if (req.header('X-Appengine-Cron') === undefined) {
@@ -12,8 +12,7 @@ const taskRemoveOrphans = async (req, res) => {
 
   try {
     // Fetch people that are older than 3 months
-    const peopleQuery = req.datastore.createQuery(req.types.person).filter('created', '<', threeMonthsAgo)
-    const oldPeople = (await req.datastore.runQuery(peopleQuery))[0]
+    const oldPeople = await findOldPeople(req, threeMonthsAgo)
 
     if (oldPeople && oldPeople.length > 0) {
       console.log(`Found ${oldPeople.length} people older than 3 months, checking for events`)
