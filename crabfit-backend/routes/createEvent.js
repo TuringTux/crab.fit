@@ -3,7 +3,7 @@ import punycode from 'punycode/'
 
 import adjectives from '../res/adjectives.json'
 import crabs from '../res/crabs.json'
-import { loadEvent, storeEvent, storeStats } from '../model/methods'
+import { loadEvent, loadStats, storeEvent, storeStats } from '../model/methods'
 
 const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1)
 
@@ -50,7 +50,7 @@ const createEvent = async (req, res) => {
     })
 
     // Update stats
-    const eventCountResult = (await req.datastore.get(req.datastore.key([req.types.stats, 'eventCount'])))[0] || null
+    const eventCountResult = await loadStats(req, 'eventCount')
     if (eventCountResult) {
       await req.datastore.upsert({
         ...eventCountResult,

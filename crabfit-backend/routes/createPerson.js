@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import bcrypt from 'bcrypt'
 
-import { loadPerson, storePerson, storeStats } from '../model/methods'
+import { loadPerson, loadStats, storePerson, storeStats } from '../model/methods'
 
 const createPerson = async (req, res) => {
   const { eventId } = req.params
@@ -26,7 +26,7 @@ const createPerson = async (req, res) => {
         res.status(201).send({ success: 'Created' })
 
         // Update stats
-        const personCountResult = (await req.datastore.get(req.datastore.key([req.types.stats, 'personCount'])))[0] || null
+        const personCountResult = await loadStats(req, 'personCount')
         if (personCountResult) {
           await req.datastore.upsert({
             ...personCountResult,
