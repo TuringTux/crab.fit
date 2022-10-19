@@ -76,6 +76,13 @@ export async function storeStats(req, statName, value) {
   })
 }
 
+export async function updateEvent(req, entity, visited) {
+  await req.datastore.upsert({
+    ...entity,
+    visited: visited
+  })
+}
+
 export async function updateStats(req, entity, value) {
   await req.datastore.upsert({
     ...entity,
