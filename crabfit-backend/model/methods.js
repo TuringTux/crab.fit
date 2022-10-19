@@ -94,9 +94,9 @@ export async function upsertPerson(entity, availability) {
   })
 }
 
-export async function upsertStats(entity, value) {
-  await datastore.upsert({
-    ...entity,
+export async function upsertStats(stat, value) {
+  await stats.upsert(stat.id, {
+    ...stat,
     value: value,
   })
 }
