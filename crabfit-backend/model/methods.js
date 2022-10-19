@@ -14,6 +14,10 @@ export async function loadPerson(req, eventId, personName) {
   return (await req.datastore.runQuery(query))[0][0]
 }
 
+export async function loadStats(req, statName) {
+  return (await req.datastore.get(req.datastore.key([req.types.stats, statName])))[0] || null
+}
+
 export async function storeEvent(req, eventId, name, currentTime, event) {
   const entity = {
     key: req.datastore.key([req.types.event, eventId]),
