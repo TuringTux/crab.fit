@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { loadEvent } from '../model/methods'
 
 const taskRemoveOrphans = async (req, res) => {
   if (req.header('X-Appengine-Cron') === undefined) {
@@ -20,7 +21,7 @@ const taskRemoveOrphans = async (req, res) => {
       // Fetch events linked to the people discovered
       let peopleWithoutEvents = 0
       await Promise.all(oldPeople.map(async person => {
-        const event = (await req.datastore.get(req.datastore.key([req.types.event, person.eventId])))[0]
+        const event = await loadEvent(req, person.eventId)
 
         if (!event) {
           peopleWithoutEvents++

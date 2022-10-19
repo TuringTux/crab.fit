@@ -1,14 +1,14 @@
 import dayjs from 'dayjs'
 import bcrypt from 'bcrypt'
 
-import { loadPerson, loadStats, storePerson, storeStats } from '../model/methods'
+import { loadEvent, loadPerson, loadStats, storePerson, storeStats } from '../model/methods'
 
 const createPerson = async (req, res) => {
   const { eventId } = req.params
   const { person } = req.body
 
   try {
-    const event = (await req.datastore.get(req.datastore.key([req.types.event, eventId])))[0]
+    const event = await loadEvent(req, eventId)
     const personResult = await loadPerson(req, eventId, person.name)
 
     if (event) {

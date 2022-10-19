@@ -1,10 +1,11 @@
 import dayjs from 'dayjs'
+import { loadEvent } from '../model/methods'
 
 const getEvent = async (req, res) => {
   const { eventId } = req.params
 
   try {
-    const event = (await req.datastore.get(req.datastore.key([req.types.event, eventId])))[0]
+    const event = await loadEvent(req, eventId)
 
     if (event) {
       res.send({
