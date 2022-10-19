@@ -3,7 +3,7 @@ import punycode from 'punycode/'
 
 import adjectives from '../res/adjectives.json'
 import crabs from '../res/crabs.json'
-import { searchEvent, loadStats, storeEvent, storeStats } from '../model/methods'
+import { findEvent, loadStats, storeEvent, storeStats } from '../model/methods'
 
 const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1)
 
@@ -32,7 +32,7 @@ const createEvent = async (req, res) => {
     // Check if the event ID already exists, and if so generate a new one
     let eventResult
     do {
-      eventResult = await searchEvent(req, eventId)
+      eventResult = await findEvent(req, eventId)
 
       if (eventResult !== undefined) {
         eventId = generateId(name)
