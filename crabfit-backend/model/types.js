@@ -9,7 +9,7 @@ class Event {
     name
     created
     times
-    timeZone
+    timezone
     visited
 }
 

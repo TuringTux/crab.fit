@@ -8,7 +8,7 @@ export const Event = sequelize.define('Event', {
     name: DataTypes.STRING,
     created: DataTypes.STRING,
     times: DataTypes.STRING,
-    timeZone: DataTypes.STRING,
+    timezone: DataTypes.STRING,
     visited: DataTypes.STRING,
     // TODO Are there more?
 })
