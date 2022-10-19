@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { findOldEvents } from '../model/methods'
 
 const taskCleanup = async (req, res) => {
   if (req.header('X-Appengine-Cron') === undefined) {
@@ -11,8 +12,7 @@ const taskCleanup = async (req, res) => {
 
   try {
     // Fetch events that haven't been visited in over 3 months
-    const eventQuery = req.datastore.createQuery(req.types.event).filter('visited', '<', threeMonthsAgo)
-    const oldEvents = (await req.datastore.runQuery(eventQuery))[0]
+    const oldEvents = await findOldEvents(req, threeMonthsAgo)
 
     if (oldEvents && oldEvents.length > 0) {
       const oldEventIds = oldEvents.map(e => e[req.datastore.KEY].name)

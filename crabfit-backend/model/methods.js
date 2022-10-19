@@ -12,6 +12,12 @@ export async function findOldPeople(req, threeMonthsAgo) {
   return oldPeople
 }
 
+export async function findOldEvents(req, threeMonthsAgo) {
+  const eventQuery = req.datastore.createQuery(req.types.event).filter('visited', '<', threeMonthsAgo)
+  const oldEvents = (await req.datastore.runQuery(eventQuery))[0]
+  return oldEvents
+}
+
 export async function loadEvent(req, eventId) {
   return (await req.datastore.get(req.datastore.key([req.types.event, eventId])))[0]
 }
