@@ -83,3 +83,7 @@ export async function deleteEvents(req, events) {
 export async function deletePeople(req, people) {
   await req.datastore.delete(people.map(person => person[req.datastore.KEY]))
 }
+
+export async function deletePerson(req, person) {
+  await req.datastore.delete(person[req.datastore.KEY])
+}
