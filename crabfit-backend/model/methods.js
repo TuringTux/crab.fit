@@ -73,3 +73,7 @@ export async function storeStats(req, statName, value) {
 export async function deleteEvents(req, events) {
   await req.datastore.delete(events.map(event => event[req.datastore.KEY]))
 }
+
+export async function deletePeople(req, people) {
+  await req.datastore.delete(people.map(person => person[req.datastore.KEY]))
+}
