@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { deleteEvents, deletePeople, findOldEvents, findPeopleOfEvent } from '../model/methods'
+import { deleteEvents, deletePeople, findOldEvents, findPeopleOfEvent, getEventIds } from '../model/methods'
 
 const taskCleanup = async (req, res) => {
   if (req.header('X-Appengine-Cron') === undefined) {
@@ -15,7 +15,7 @@ const taskCleanup = async (req, res) => {
     const oldEvents = await findOldEvents(req, threeMonthsAgo)
 
     if (oldEvents && oldEvents.length > 0) {
-      const oldEventIds = oldEvents.map(e => e[req.datastore.KEY].name)
+      const oldEventIds = getEventIds(req, oldEvents)
       console.log(`Found ${oldEventIds.length} events to remove`)
 
       // Fetch availabilities linked to the events discovered
