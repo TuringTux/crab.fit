@@ -50,6 +50,7 @@ export async function loadStats(statName) {
 
 export async function storeEvent(eventId, name, currentTime, event) {
   await events.set(eventId, {
+    id: eventId,
     name: name,
     created: currentTime,
     times: event.times,
