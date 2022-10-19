@@ -105,6 +105,6 @@ export async function deletePerson(person) { // TODO Migrate to keyv
   await datastore.delete(person[datastore.KEY])
 }
 
-export function getEventIds(events) { // TODO Migrate to keyv
-  return events.map(e => e[datastore.KEY].name)
+export function getEventIds(es) {
+  return es.map(e => e.id)
 }
