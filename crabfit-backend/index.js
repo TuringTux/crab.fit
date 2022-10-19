@@ -32,11 +32,6 @@ const datastore = new Datastore({
 app.use(express.json())
 app.use((req, _res, next) => {
   req.datastore = datastore
-  req.types = {
-    event: process.env.NODE_ENV === 'production' ? 'Event' : 'DevEvent',
-    person: process.env.NODE_ENV === 'production' ? 'Person' : 'DevPerson',
-    stats: process.env.NODE_ENV === 'production' ? 'Stats' : 'DevStats',
-  }
   next()
 })
 app.options('*', cors(corsOptions))

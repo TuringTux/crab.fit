@@ -1,35 +1,41 @@
+const TYPES = {
+  event: process.env.NODE_ENV === 'production' ? 'Event' : 'DevEvent',
+  person: process.env.NODE_ENV === 'production' ? 'Person' : 'DevPerson',
+  stats: process.env.NODE_ENV === 'production' ? 'Stats' : 'DevStats',
+}
+
 export async function findEvent(req, eventId) {
-  const query = req.datastore.createQuery(req.types.event)
+  const query = req.datastore.createQuery(TYPES.event)
     .select('__key__')
-    .filter('__key__', req.datastore.key([req.types.event, eventId]))
+    .filter('__key__', req.datastore.key([TYPES.event, eventId]))
 
   return (await req.datastore.runQuery(query))[0][0]
 }
 
 export async function findOldPeople(req, threeMonthsAgo) {
-  const peopleQuery = req.datastore.createQuery(req.types.person).filter('created', '<', threeMonthsAgo)
+  const peopleQuery = req.datastore.createQuery(TYPES.person).filter('created', '<', threeMonthsAgo)
   const oldPeople = (await req.datastore.runQuery(peopleQuery))[0]
   return oldPeople
 }
 
 export async function findOldEvents(req, threeMonthsAgo) {
-  const eventQuery = req.datastore.createQuery(req.types.event).filter('visited', '<', threeMonthsAgo)
+  const eventQuery = req.datastore.createQuery(TYPES.event).filter('visited', '<', threeMonthsAgo)
   const oldEvents = (await req.datastore.runQuery(eventQuery))[0]
   return oldEvents
 }
 
 export async function findPeopleOfEvent(req, eventId) {
-  const query = req.datastore.createQuery(req.types.person).filter('eventId', eventId)
+  const query = req.datastore.createQuery(TYPES.person).filter('eventId', eventId)
   let people = (await req.datastore.runQuery(query))[0]
   return people
 }
 
 export async function loadEvent(req, eventId) {
-  return (await req.datastore.get(req.datastore.key([req.types.event, eventId])))[0]
+  return (await req.datastore.get(req.datastore.key([TYPES.event, eventId])))[0]
 }
 
 export async function loadPerson(req, eventId, personName) {
-  const query = req.datastore.createQuery(req.types.person)
+  const query = req.datastore.createQuery(TYPES.person)
     .filter('eventId', eventId)
     .filter('name', personName)
 
@@ -37,12 +43,12 @@ export async function loadPerson(req, eventId, personName) {
 }
 
 export async function loadStats(req, statName) {
-  return (await req.datastore.get(req.datastore.key([req.types.stats, statName])))[0] || null
+  return (await req.datastore.get(req.datastore.key([TYPES.stats, statName])))[0] || null
 }
 
 export async function storeEvent(req, eventId, name, currentTime, event) {
   const entity = {
-    key: req.datastore.key([req.types.event, eventId]),
+    key: req.datastore.key([TYPES.event, eventId]),
     data: {
       name: name,
       created: currentTime,
@@ -56,7 +62,7 @@ export async function storeEvent(req, eventId, name, currentTime, event) {
 
 export async function storePerson(req, person, hash, eventId, currentTime) {
   const entity = {
-    key: req.datastore.key(req.types.person),
+    key: req.datastore.key(TYPES.person),
     data: {
       name: person.name.trim(),
       password: hash,
@@ -71,7 +77,7 @@ export async function storePerson(req, person, hash, eventId, currentTime) {
 
 export async function storeStats(req, statName, value) {
   await req.datastore.insert({
-    key: req.datastore.key([req.types.stats, statName]),
+    key: req.datastore.key([TYPES.stats, statName]),
     data: { value },
   })
 }
