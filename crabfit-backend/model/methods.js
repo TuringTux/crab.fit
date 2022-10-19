@@ -1,4 +1,4 @@
-export async function loadEvent(req, eventId) {
+export async function searchEvent(req, eventId) {
   const query = req.datastore.createQuery(req.types.event)
     .select('__key__')
     .filter('__key__', req.datastore.key([req.types.event, eventId]))
