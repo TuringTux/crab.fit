@@ -12,24 +12,24 @@ const taskCleanup = async (req, res) => {
 
   try {
     // Fetch events that haven't been visited in over 3 months
-    const oldEvents = await findOldEvents(req, threeMonthsAgo)
+    const oldEvents = await findOldEvents(threeMonthsAgo)
 
     if (oldEvents && oldEvents.length > 0) {
-      const oldEventIds = getEventIds(req, oldEvents)
+      const oldEventIds = getEventIds(oldEvents)
       console.log(`Found ${oldEventIds.length} events to remove`)
 
       // Fetch availabilities linked to the events discovered
       let peopleDiscovered = 0
       await Promise.all(oldEventIds.map(async eventId => {
-        const oldPeople = findPeopleOfEvent(req, eventId)
+        const oldPeople = findPeopleOfEvent(eventId)
 
         if (oldPeople && oldPeople.length > 0) {
           peopleDiscovered += oldPeople.length
-          await deletePeople(req, oldPeople)
+          await deletePeople(oldPeople)
         }
       }))
 
-      await deleteEvents(req, oldEvents)
+      await deleteEvents(oldEvents)
 
       console.log(`Cleanup successful: ${oldEventIds.length} events and ${peopleDiscovered} people removed`)
 

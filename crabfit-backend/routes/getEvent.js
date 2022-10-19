@@ -5,7 +5,7 @@ const getEvent = async (req, res) => {
   const { eventId } = req.params
 
   try {
-    const event = await loadEvent(req, eventId)
+    const event = await loadEvent(eventId)
 
     if (event) {
       res.send({
@@ -14,7 +14,7 @@ const getEvent = async (req, res) => {
       })
 
       // Update last visited time
-      await upsertEvent(req, event, dayjs().unix())
+      await upsertEvent(event, dayjs().unix())
     } else {
       res.status(404).send({ error: 'Event not found' })
     }

@@ -32,14 +32,14 @@ const createEvent = async (req, res) => {
     // Check if the event ID already exists, and if so generate a new one
     let eventResult
     do {
-      eventResult = await findEvent(req, eventId)
+      eventResult = await findEvent(eventId)
 
       if (eventResult !== undefined) {
         eventId = generateId(name)
       }
     } while (eventResult !== undefined)
 
-    await storeEvent(req, eventId, name, currentTime, event)
+    await storeEvent(eventId, name, currentTime, event)
 
     res.status(201).send({
       id: eventId,
@@ -50,11 +50,11 @@ const createEvent = async (req, res) => {
     })
 
     // Update stats
-    const eventCountResult = await loadStats(req, 'eventCount')
+    const eventCountResult = await loadStats('eventCount')
     if (eventCountResult) {
-      await upsertStats(req, eventCountResult, eventCountResult.value + 1)
+      await upsertStats(eventCountResult, eventCountResult.value + 1)
     } else {
-      await storeStats(req, 'eventCount', 1)
+      await storeStats('eventCount', 1)
     }
   } catch (e) {
     console.error(e)

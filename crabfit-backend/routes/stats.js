@@ -6,8 +6,8 @@ const stats = async (req, res) => {
   let personCount = null
 
   try {
-    const eventResult = await loadStats(req, 'eventCount')
-    const personResult = await loadStats(req, 'personCount')
+    const eventResult = await loadStats('eventCount')
+    const personResult = await loadStats('personCount')
 
     if (eventResult) {
       eventCount = eventResult.value

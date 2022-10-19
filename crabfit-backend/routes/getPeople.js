@@ -4,7 +4,7 @@ const getPeople = async (req, res) => {
   const { eventId } = req.params
 
   try {
-    let people = await findPeopleOfEvent(req, eventId)
+    let people = await findPeopleOfEvent(eventId)
     people = people.map(person => ({
       name: person.name,
       availability: person.availability,

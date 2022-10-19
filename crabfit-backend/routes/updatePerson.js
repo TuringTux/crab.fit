@@ -7,7 +7,7 @@ const updatePerson = async (req, res) => {
   const { person } = req.body
 
   try {
-    const personResult = await loadPerson(req, eventId, personName)
+    const personResult = await loadPerson(eventId, personName)
 
     if (personResult) {
       if (person && person.availability) {
@@ -18,7 +18,7 @@ const updatePerson = async (req, res) => {
           }
         }
 
-        await upsertPerson(req, personResult, person.availability)
+        await upsertPerson(personResult, person.availability)
 
         res.status(200).send({ success: 'Updated' })
       } else {

@@ -6,7 +6,7 @@ const login = async (req, res) => {
   const { person } = req.body
 
   try {
-    const personResult = await loadPerson(req, eventId, personName)
+    const personResult = await loadPerson(eventId, personName)
 
     if (personResult) {
       if (personResult.password) {

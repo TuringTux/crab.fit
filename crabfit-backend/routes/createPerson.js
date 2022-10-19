@@ -8,8 +8,8 @@ const createPerson = async (req, res) => {
   const { person } = req.body
 
   try {
-    const event = await loadEvent(req, eventId)
-    const personResult = await loadPerson(req, eventId, person.name)
+    const event = await loadEvent(eventId)
+    const personResult = await loadPerson(eventId, person.name)
 
     if (event) {
       if (person && personResult === undefined) {
@@ -21,16 +21,16 @@ const createPerson = async (req, res) => {
           hash = await bcrypt.hash(person.password, 10)
         }
 
-        await storePerson(req, person, hash, eventId, currentTime)
+        await storePerson(person, hash, eventId, currentTime)
 
         res.status(201).send({ success: 'Created' })
 
         // Update stats
-        const personCountResult = await loadStats(req, 'personCount')
+        const personCountResult = await loadStats('personCount')
         if (personCountResult) {
-          await upsertStats(req, personCountResult, personCountResult.value + 1)
+          await upsertStats(personCountResult, personCountResult.value + 1)
         } else {
-          await storeStats(req, 'personCount', 1)
+          await storeStats('personCount', 1)
         }
       } else {
         res.status(400).send({ error: 'Unable to create person' })

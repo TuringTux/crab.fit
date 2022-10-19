@@ -10,7 +10,7 @@ const datastore = new Datastore({
   keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
 })
 
-export async function findEvent(req, eventId) {
+export async function findEvent(eventId) {
   const query = datastore.createQuery(TYPES.event)
     .select('__key__')
     .filter('__key__', datastore.key([TYPES.event, eventId]))
@@ -18,29 +18,29 @@ export async function findEvent(req, eventId) {
   return (await datastore.runQuery(query))[0][0]
 }
 
-export async function findOldPeople(req, threeMonthsAgo) {
+export async function findOldPeople(threeMonthsAgo) {
   const peopleQuery = datastore.createQuery(TYPES.person).filter('created', '<', threeMonthsAgo)
   const oldPeople = (await datastore.runQuery(peopleQuery))[0]
   return oldPeople
 }
 
-export async function findOldEvents(req, threeMonthsAgo) {
+export async function findOldEvents(threeMonthsAgo) {
   const eventQuery = datastore.createQuery(TYPES.event).filter('visited', '<', threeMonthsAgo)
   const oldEvents = (await datastore.runQuery(eventQuery))[0]
   return oldEvents
 }
 
-export async function findPeopleOfEvent(req, eventId) {
+export async function findPeopleOfEvent(eventId) {
   const query = datastore.createQuery(TYPES.person).filter('eventId', eventId)
   let people = (await datastore.runQuery(query))[0]
   return people
 }
 
-export async function loadEvent(req, eventId) {
+export async function loadEvent(eventId) {
   return (await datastore.get(datastore.key([TYPES.event, eventId])))[0]
 }
 
-export async function loadPerson(req, eventId, personName) {
+export async function loadPerson(eventId, personName) {
   const query = datastore.createQuery(TYPES.person)
     .filter('eventId', eventId)
     .filter('name', personName)
@@ -48,11 +48,11 @@ export async function loadPerson(req, eventId, personName) {
   return (await datastore.runQuery(query))[0][0]
 }
 
-export async function loadStats(req, statName) {
+export async function loadStats(statName) {
   return (await datastore.get(datastore.key([TYPES.stats, statName])))[0] || null
 }
 
-export async function storeEvent(req, eventId, name, currentTime, event) {
+export async function storeEvent(eventId, name, currentTime, event) {
   const entity = {
     key: datastore.key([TYPES.event, eventId]),
     data: {
@@ -66,7 +66,7 @@ export async function storeEvent(req, eventId, name, currentTime, event) {
   await datastore.insert(entity)
 }
 
-export async function storePerson(req, person, hash, eventId, currentTime) {
+export async function storePerson(person, hash, eventId, currentTime) {
   const entity = {
     key: datastore.key(TYPES.person),
     data: {
@@ -81,46 +81,46 @@ export async function storePerson(req, person, hash, eventId, currentTime) {
   await datastore.insert(entity)
 }
 
-export async function storeStats(req, statName, value) {
+export async function storeStats(statName, value) {
   await datastore.insert({
     key: datastore.key([TYPES.stats, statName]),
     data: { value },
   })
 }
 
-export async function upsertEvent(req, entity, visited) {
+export async function upsertEvent(entity, visited) {
   await datastore.upsert({
     ...entity,
     visited: visited
   })
 }
 
-export async function upsertPerson(req, entity, availability) {
+export async function upsertPerson(entity, availability) {
   await datastore.upsert({
     ...entity,
     availability: availability
   })
 }
 
-export async function upsertStats(req, entity, value) {
+export async function upsertStats(entity, value) {
   await datastore.upsert({
     ...entity,
     value: value,
   })
 }
 
-export async function deleteEvents(req, events) {
+export async function deleteEvents(events) {
   await datastore.delete(events.map(event => event[datastore.KEY]))
 }
 
-export async function deletePeople(req, people) {
+export async function deletePeople(people) {
   await datastore.delete(people.map(person => person[datastore.KEY]))
 }
 
-export async function deletePerson(req, person) {
+export async function deletePerson(person) {
   await datastore.delete(person[datastore.KEY])
 }
 
-export function getEventIds(req, events) {
+export function getEventIds(events) {
   return events.map(e => e[datastore.KEY].name)
 }
