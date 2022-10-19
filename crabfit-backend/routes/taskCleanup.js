@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { findOldEvents } from '../model/methods'
+import { deleteEvents, findOldEvents } from '../model/methods'
 
 const taskCleanup = async (req, res) => {
   if (req.header('X-Appengine-Cron') === undefined) {
@@ -30,7 +30,7 @@ const taskCleanup = async (req, res) => {
         }
       }))
 
-      await req.datastore.delete(oldEvents.map(event => event[req.datastore.KEY]))
+      await deleteEvents(req, oldEvents)
 
       console.log(`Cleanup successful: ${oldEventIds.length} events and ${peopleDiscovered} people removed`)
 

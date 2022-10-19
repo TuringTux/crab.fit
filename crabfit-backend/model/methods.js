@@ -69,3 +69,7 @@ export async function storeStats(req, statName, value) {
     data: { value },
   })
 }
+
+export async function deleteEvents(req, events) {
+  await req.datastore.delete(events.map(event => event[req.datastore.KEY]))
+}
