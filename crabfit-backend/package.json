@@ -15,7 +15,8 @@
     "dev": "rm -rf .parcel-cache dist && NODE_ENV=development nodemon --exec \"yarn build:dev && yarn start\" --watch routes --watch res --watch index.js",
     "build": "parcel build",
     "start": "node ./dist/index.js",
-    "lint": "eslint index.js ./routes"
+    "lint": "eslint index.js ./routes",
+    "test": "jest"
   },
   "dependencies": {
     "@google-cloud/datastore": "^7.0.0",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "eslint": "^8.22.0",
+    "jest": "^29.2.1",
     "nodemon": "^2.0.19",
     "parcel": "^2.7.0"
   }
